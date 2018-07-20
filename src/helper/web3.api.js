@@ -45,14 +45,38 @@ class web3Api {
      * @param {String} _from 发起交易方的来源地址
      * @param {Function} callback 回调函数
      */
-    static async transfer(_to,_value,_from,callback) {
+    static async transfer(_to,_value,_from,callbackurl_hash,callbackurl_receipt) {
         let result = {
             status : 0,
             receipt: {},
             hash: ''
         };
-        
         let num = web3.utils.toWei(String(_value), "ether");
+        Cwv.methods.transfer(_to,num).send({
+            from : _from,
+            gas: '1000000'
+        }).on('transactionHash', function(hash){
+            console.log('transactionHash=>')
+            console.log(hash)
+            console.log(callbackurl_hash)
+        })
+        // .on('confirmation', function(confirmationNumber, receipt){
+        //     console.log('confirmation=>')
+        //     console.log(confirmationNumber,receipt)
+        // })
+        .on('receipt', function(receipt){
+            // receipt example
+            console.log('receipt=>')
+            console.log(receipt); //查询这里可以得到结果
+            console.log(callbackurl_receipt)
+        })
+        .on('error', function(err){
+            console.log('error=>')
+            console.log(err);
+        });
+
+        /*
+        获取即时hash值
         let txhash = Cwv.methods.transfer(_to,num).send({
             from : _from,
             gas: '1000000'
@@ -66,6 +90,7 @@ class web3Api {
             }
             callback(result);
         });
+        */
 
 
     }
