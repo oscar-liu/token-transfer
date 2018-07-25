@@ -127,7 +127,7 @@ class ApiController {
             methods : 'signTransfer',
             data : {}
         };
-
+        
         if( params.from 
             && params.to 
             && params.num

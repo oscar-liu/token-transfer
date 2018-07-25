@@ -60,7 +60,22 @@ class TestController {
 
     //测试签名交易 
     static async signTransaction ( ctx ) {
-        
+        //回调信息
+        var msg = { blockHash: '0x0000000000000000000000000000000000000000000000000000000000000000',
+        blockNumber: null,
+        from: '0x05Ceb752AbCB7bD073bf5209C5e470b0d0d384eB',
+        gas: 150000,
+        gasPrice: '1210000000',
+        hash: '0xb825d1acdb9f1074ff39c7d1ebfb0e193e39dcef9270dce2d38f42e29cd98f1d',
+        input: '0xa9059cbb000000000000000000000000ab4fea08ed95b8346c876ad114e45b018ee70adc00000000000000000000000000000000000000000000000000000000000000af',
+        nonce: 8,
+        to: '0xED494c9e2F8E34e53BDD0EA9B4d80305cb15C5c2',
+        transactionIndex: 0,
+        value: '0',
+        v: '0x1b',
+        r: '0x7e0e193537aa713aefdc59b9a1a70fc0e85855e70d1d829aad0889e7eb051ea4',
+        s: '0x16fe4e53cd3e5af4397d9a83acaa1c370d90164e4a493dc08524ee064a51e387' };
+
     }
 
 }

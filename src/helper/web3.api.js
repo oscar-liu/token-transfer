@@ -87,17 +87,21 @@ class web3Api {
         //.on('error', function(err){});
     }
 
+    //签名交易
     static async signTransfer(data) {
         
-        web3Api.transferSign(data.from, data.to, data.num, function(res){
+        web3Api.transferSign(data.from, data.to, data.num, data.fromAddrKey, function(res){
+            //成功后的回调
             console.log(res)
         }, function(res){
+            //失败后的回调
             console.log(res)
         })
        
 
     }
 
+    //弃用
     static async signTransfer2(data) {
         //cwv 代币的合约地址
         var contract = new web3.eth.Contract(abi, contractAddress, {
@@ -144,11 +148,11 @@ class web3Api {
     }
     
 
-    static async transferSign(from, to, value, success, error) {
+    static async transferSign(from, to, value, fromAddrKey, success,  error) {
         try {
             //定义transaction
-            var t = {
-                to: contractAddress, // 因为是调用合约，所以这个是合约地址
+            var rawTx = {
+                to: to, //contractAddress, // 因为是调用合约，所以这个是合约地址
                 value: '0x00', //转移的以太币数量为0
                 data: Cwv.methods.transfer(to, value).encodeABI() //要调用的合约函数，用的ERC20标准
             }
@@ -161,42 +165,46 @@ class web3Api {
             error(1)
             return
         }
+        // console.log(rawTx);
         //获取当前gas价格
         web3.eth.getGasPrice().then(function(p) {
-            t.gasPrice = web3.utils.toHex(p);
+            rawTx.gasPrice = web3.utils.toHex(p);
             //获取nonce
             web3.eth.getTransactionCount(from,
             function(err, r) {
-                t.nonce = web3.utils.toHex(r);
-                t.from = from;
+                rawTx.nonce = web3.utils.toHex(r);
+                rawTx.from = from;
                 //暂时没用预估，代码先保留
-                web3.eth.estimateGas(t,
+                web3.eth.estimateGas(rawTx,
                 function(err, gas) {
                     gas = '150000';
-                    t.gasLimit = web3.utils.toHex(gas);
+                    rawTx.gasLimit = web3.utils.toHex(gas);
+                    // console.log('rawTx=>',rawTx)
                     //初始化transaction
-                    var tx = new ethereumjs.Tx(t);
-                    var privateKey = '0x571df2a9a9c12b085f6ec2ddb06f338ba5322c4ec8b494071118cc1f35915ce3'; //私钥
+                    var tx = new Tx(rawTx);
+                    var privateKey = fromAddrKey; 
                     if ('0x' == privateKey.substr(0, 2)) {
                         privateKey = privateKey.substr(2)
                     }
-                    privateKey = new ethereumjs.Buffer.Buffer(privateKey, 'hex');
+                    privateKey = new Buffer(privateKey, 'hex');
                     //签名
                     tx.sign(privateKey);
+                    
                     var serializedTx = '0x' + tx.serialize().toString('hex');
+                    // console.log('serializedTx=>',serializedTx)
                     //发送原始transaction
                     web3.eth.sendSignedTransaction(serializedTx,
                     function(err, r) {
                         if(!err){
-                            //根据hash获取完整的transaction，chrome开发者工具中，这里会一直有json-rpc，大概会有70多个，目前不清楚原因，知道的可以在评论区解释下
                             web3.eth.getTransaction(r,
                             function(err, r) {
                                 success(r)
                             })
                         }
                     }).catch(function(err){
+                        console.log('eth gas 不足');
                         //gas不足
-                        error(2)
+                        error(err)
                     });
                 })
             })
