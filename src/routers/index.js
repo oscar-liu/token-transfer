@@ -8,11 +8,12 @@ router
     .get('/',Api.error)
     .get('/api/getBlockNumber',Api.getBlockNumber)
     .post('/api/balanceOf', Api.balanceOf)
+    .post('/api/getEthBalance', Api.getEthBalance)
     .post('/api/createAccount',Api.createAccount)
     .post('/api/transfer', Api.transfer)
     .post('/api/signTransfer', Api.signTransfer)
 
-    .post('/api/test/updateRectip', Test.updateTransactionLog)
-    .post('/api/test/signTransaction', Test.signTransaction)
+
+    .post('/api/test/ethTransfer', Test.ethTransfer)
 
 module.exports = router

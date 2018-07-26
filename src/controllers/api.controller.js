@@ -155,6 +155,65 @@ class ApiController {
     }
 
     
+    //区取ETH余额
+    static async getEthBalance(ctx){
+        let req = ctx.request.body;
+        let data = {};
+        if(req ){
+            data = JSON.parse(req);
+        }
+        
+        let result = {
+            msg : 'success',
+            status : 1,
+            methods : 'balanceOf',
+            data : {}
+        };
+        
+        if(data && data.address){
+            let balanceNum = await web3Api.getEthBalance(data.address);
+            result.data = {
+                balanceNum : balanceNum
+            };
+        }else{
+            result.status = 0;
+            result.msg = 'error address empty!';
+        }
+        ctx.body = result;
+    }
+
+    static async ethTransfer(ctx) {
+        let req = ctx.request.body;
+        let data = {};
+        if(req ){
+            data = JSON.parse(req);
+        }else{
+            return;
+        }
+        // console.log(data)
+        let params;
+            if(data.params){
+                params = data.params;
+            }
+
+        let ethData = {
+            from : params.from,
+            to : params.to,
+            num : params.num,
+            callbackurl : params.callbackurl
+        };
+        web3Api.ethTransfer(ethData);
+
+        ctx.body = {
+            msg : 'success',
+            status : 0,
+            methods : 'ethTransfer',
+            data : {
+                'msg' : 'callback function'
+            }
+        };;
+        
+    }
 
 }
 

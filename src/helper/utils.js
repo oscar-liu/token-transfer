@@ -50,6 +50,7 @@ class Utils{
             curlData.address = data.address;
             curlData.value = data.value;
         }
+        console.log(curlData)
         await axios.post(url, {
             body : {
                 data : curlData

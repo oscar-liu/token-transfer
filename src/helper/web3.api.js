@@ -67,8 +67,6 @@ class web3Api {
             };
             //回调Api Service
             utils.callbackHash(postData);
-            
-
         })
         .on('receipt', function(receipt){
             // console.log('receipt=>',receipt.transactionHash); 
@@ -150,7 +148,7 @@ class web3Api {
                             utils.callbackHash(postData);
                         })
                         .on('receipt', function(receipt){
-                            // console.log('receipt=>',receipt.transactionHash); 
+                            console.log('receipt=>',receipt.transactionHash); 
                             console.log('receipt->status = ' , receipt.status )
                             let postReceiptData = {
                                 hash : receipt.transactionHash,
@@ -171,6 +169,49 @@ class web3Api {
         })
     }
 
+    /** -------------- ETH  --------------------- */
+
+    /**
+     * 查询 cwv 余额
+     * @param {String} address 账户地址
+     * @returns number
+     */
+    static async getEthBalance(address) {
+        if(!web3.utils.isAddress(address)) {
+            console.log("不是一个有效的钱包地址");
+            return;
+        }
+        let ethNum;
+        await web3.eth.getBalance(address).then(function(res) {
+            ethNum = web3.utils.fromWei(res, "ether");
+        });
+        return ethNum;
+    }
+
+    /**
+     * eth 交易
+     */
+    static async ethTransfer(data){
+        console.log(data); return;
+        let _ethNum = web3.utils.toWei(String(data.num), "ether");
+        let raw = {
+            from: data.from,
+            to: data.to,
+            value: _ethNum
+          };
+        web3.eth.sendTransaction(raw)
+            .on('transactionHash', function(hash){
+                console.log('transactionHash=>',hash)
+            })
+            .on('receipt', function(receipt){
+                console.log('receipt->status = ' , receipt.status )
+                
+            })
+            .on('error', function(err){
+                //todo 一般就是gas不足
+                console.log('error=>',err);
+            });
+    }
 
 }
 
