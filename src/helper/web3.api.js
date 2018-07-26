@@ -47,7 +47,7 @@ class web3Api {
      * @param {String} _from 发起交易方的来源地址
      * @param {Function} callback 回调函数
      */
-    static async transfer(_to,_value,_from) {
+    static async transfer(_to,_value,_from,_callbackurl) {
         let result = {
             status : 0,
             receipt: {},
@@ -59,7 +59,6 @@ class web3Api {
             gas: '1000000'
         }).on('transactionHash', function(hash){
             console.log('transactionHash=>',hash)
-            // console.log(callbackurl_hash)
             let postData = {
                 to: _to, 
                 value: _value, 
@@ -68,6 +67,8 @@ class web3Api {
             };
             //回调Api Service
             utils.callbackHash(postData);
+            
+
         })
         .on('receipt', function(receipt){
             // console.log('receipt=>',receipt.transactionHash); 
@@ -79,6 +80,16 @@ class web3Api {
             };
             //回调Api Service
             utils.callbackReceipt(postReceiptData);
+            //回调 function
+            if(_callbackurl){
+                let callbackpostdata = {
+                    value: _value, 
+                    address : _to,  
+                    hash : receipt.transactionHash,
+                    status : receipt.status,
+                };
+                utils.callbackUpAccounts(callbackpostdata);
+            }
         });
         //.on('error', function(err){});
     }
@@ -145,6 +156,8 @@ class web3Api {
                                 hash : receipt.transactionHash,
                                 status : receipt.status,
                                 receipt : JSON.stringify(receipt),
+                                address : from,   //发起者地址
+                                value : value   //交易金额
                             };
                             //回调Api Service
                             utils.callbackReceipt(postReceiptData);
@@ -152,7 +165,7 @@ class web3Api {
                         .on('error', function(err){
                             //todo 一般就是gas不足
                             console.log('error=>',err);
-                            console.log(rawTx);
+                            //交易回滚
                         });
             })
         })

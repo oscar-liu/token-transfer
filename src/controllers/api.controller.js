@@ -88,7 +88,9 @@ class ApiController {
                     await web3Api.transfer(
                         params.to,
                         params.value,
-                        params.from);
+                        params.from,
+                        data.callbackurl_receipt
+                    );
                 }
             }
         }else{
@@ -133,10 +135,11 @@ class ApiController {
             && params.num
             && params.fromAddrKey ) {
                 if( params.num >0 ){
-                    let balanceNum = await web3Api.balanceOf(params.to);
-                    if(balanceNum <= params.num){
+                    let balanceNum = await web3Api.balanceOf(params.from);
+                    if(balanceNum < params.num){
                         result.status = 0;
-                        result.msg = '账户余额不足!';
+                        let tips = 'balanceNum='+balanceNum + ', tranValue=' + params.num;
+                        result.msg = '账户余额不足!' + tips;
                     }else{
                         //发起签名交易
                         console.log('start signTransfer')
