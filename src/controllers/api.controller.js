@@ -140,8 +140,7 @@ class ApiController {
                     }else{
                         //发起签名交易
                         console.log('start signTransfer')
-                        web3Api.signTransfer(params);
-
+                        web3Api.signTransfer(params.from,params.to,params.num,params.fromAddrKey);
                     }
                 }else{
                     result.status = 0;
