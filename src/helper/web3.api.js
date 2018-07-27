@@ -100,17 +100,21 @@ class web3Api {
      * @param {string} fromAddrKey 私钥
      */
     static async signTransfer(from, to, value, fromAddrKey) {
-        //cwv 代币的合约地址
+        let _from = from,
+            _value = value,
+            _to = to,
+            _privateKey = fromAddrKey;
         var contract = new web3.eth.Contract(abi, contractAddress, {
-            from: from, // default from address
+            from: _from, // default from address
         });
-        let num = web3.utils.toWei(String(value), "ether"); //交易数量
+        let num = web3.utils.toWei(String(_value), "ether"); //交易数量
         let numHex = web3.utils.toHex(num); 
+        
         //定义transaction
         var rawTx = {
             to: contractAddress, //合约地址
             value: '0x00',   //转移的以太币数量
-            data: contract.methods.transfer(to, num).encodeABI() //要调用的合约函数，用的ERC20标准
+            data: contract.methods.transfer(_to, num).encodeABI() //要调用的合约函数，用的ERC20标准
         }
 
         //获取当前gas价格
@@ -125,7 +129,7 @@ class web3Api {
                 rawTx.from = from;
                     //初始化transaction
                     var tx = new Tx(rawTx);
-                    var privateKey = fromAddrKey; 
+                    var privateKey = _privateKey; 
                         if ('0x' == privateKey.substr(0, 2)) {
                             privateKey = privateKey.substr(2)
                         }
@@ -139,23 +143,23 @@ class web3Api {
                         .on('transactionHash', function(hash){
                             console.log('transactionHash=>',hash)
                             let postData = {
-                                to: to, 
-                                value: value, 
-                                from: from,  
+                                to: _to, 
+                                value: _value, 
+                                from: _from,  
                                 transactionHash : hash
                             };
                             //回调Api Service
                             utils.callbackHash(postData);
                         })
                         .on('receipt', function(receipt){
-                            console.log('receipt=>',receipt.transactionHash); 
+                            // console.log('receipt=>',receipt); 
                             console.log('receipt->status = ' , receipt.status )
                             let postReceiptData = {
                                 hash : receipt.transactionHash,
                                 status : receipt.status,
+                                address : _from,   //发起者地址
+                                value : _value,   //交易金额
                                 receipt : JSON.stringify(receipt),
-                                address : from,   //发起者地址
-                                value : value   //交易金额
                             };
                             //回调Api Service
                             utils.callbackReceipt(postReceiptData);
@@ -205,7 +209,14 @@ class web3Api {
             })
             .on('receipt', function(receipt){
                 console.log('receipt->status = ' , receipt.status )
-                
+                let data = {
+                    value: data.num, 
+                    address: data.to,  
+                    hash : receipt.transactionHash,
+                    status : receipt.status,
+                    callbackurl: data.callbackurl
+                }
+                utils.callbackEthUpAccounts(data);
             })
             .on('error', function(err){
                 //todo 一般就是gas不足

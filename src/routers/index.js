@@ -14,6 +14,6 @@ router
     .post('/api/signTransfer', Api.signTransfer)
 
 
-    .post('/api/test/ethTransfer', Test.ethTransfer)
+    // .post('/api/test/ethTransfer', Test.ethTransfer)
 
 module.exports = router

@@ -37,7 +37,7 @@ class Utils{
         const url = config.service_api + '/api/transfer/updateReceipt';
         let result;
         // console.log('回调receipt=>',data);
-        if(data){
+        if(!data){
             return;
         }
         let curlData = {
@@ -50,7 +50,7 @@ class Utils{
             curlData.address = data.address;
             curlData.value = data.value;
         }
-        console.log(curlData)
+        // console.log('curlData -> ',curlData)
         await axios.post(url, {
             body : {
                 data : curlData
@@ -72,6 +72,32 @@ class Utils{
     //receipt 回调 提现后回调
     static async callbackUpAccounts ( data ) {
         const url = config.service_api + '/api/transfer/updateAccounts';
+        let result;
+        await axios.post(url, {
+            body : {
+                data : {
+                    value: data.value, 
+                    address: data.address,  
+                    hash : data.hash,
+                    status : data.status,
+                }
+            }
+          })
+          .then(function (response) {
+              if(response.status == 200){
+                result = response.data;
+              }
+          })
+          .catch(function (error) {
+            result = error;
+          });
+
+    }
+
+
+
+    static async callbackEthUpAccounts ( data ) {
+        const url = config.service_api + data.callbackurl; //  '/api/transfer/updateEthAccounts';
         let result;
         await axios.post(url, {
             body : {

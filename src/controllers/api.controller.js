@@ -182,6 +182,7 @@ class ApiController {
         ctx.body = result;
     }
 
+    //eth 转账
     static async ethTransfer(ctx) {
         let req = ctx.request.body;
         let data = {};
