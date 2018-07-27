@@ -191,7 +191,6 @@ class ApiController {
         }else{
             return;
         }
-        // console.log(data)
         let params;
             if(data.params){
                 params = data.params;

@@ -12,8 +12,6 @@ router
     .post('/api/createAccount',Api.createAccount)
     .post('/api/transfer', Api.transfer)
     .post('/api/signTransfer', Api.signTransfer)
-
-
-    // .post('/api/test/ethTransfer', Test.ethTransfer)
+    .post('/api/ethTransfer', Api.ethTransfer)
 
 module.exports = router
