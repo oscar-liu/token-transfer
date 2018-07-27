@@ -9,3 +9,4 @@ selenium-debug.log
 package-lock.json
 .vscode/
 src/helper/web3.provider.js
+yarn-error.log

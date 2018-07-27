@@ -196,7 +196,6 @@ class web3Api {
      * eth 交易
      */
     static async ethTransfer(data){
-        console.log(data); return;
         let _ethNum = web3.utils.toWei(String(data.num), "ether");
         let raw = {
             from: data.from,
@@ -208,7 +207,7 @@ class web3Api {
                 console.log('transactionHash=>',hash)
             })
             .on('receipt', function(receipt){
-                console.log('receipt->status = ' , receipt.status )
+                console.log('210online receipt-> ' , receipt )
                 let data = {
                     value: data.num, 
                     address: data.to,  
