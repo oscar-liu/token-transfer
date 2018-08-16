@@ -36,7 +36,7 @@ class Utils{
     static async callbackReceipt ( data ) {
         const url = config.service_api + '/api/transfer/updateReceipt';
         let result;
-        console.log('回调receipt=>',data);
+        // console.log('回调receipt=>',data);
         if(!data){
             return;
         }
@@ -50,7 +50,7 @@ class Utils{
             curlData.address = data.address;
             curlData.value = data.value;
         }
-        // console.log('curlData -> ',curlData)
+        console.log('curlData -> ',curlData)
         await axios.post(url, {
             body : {
                 data : curlData
@@ -58,6 +58,7 @@ class Utils{
           })
           .then(function (response) {
               if(response.status == 200){
+                  console.log(response.data)
                 result = response.data;
               }
           })
