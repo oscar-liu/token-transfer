@@ -21,7 +21,7 @@ class ApiController {
             passwd = 'cwv2018';
         if(req){
             data = JSON.parse(req);
-            if(data.params.passwd){
+            if(data.params && data.params.passwd){
                 passwd = data.params.passwd;
             }
         }
