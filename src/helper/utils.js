@@ -36,7 +36,7 @@ class Utils{
     static async callbackReceipt ( data ) {
         const url = config.service_api + '/api/transfer/updateReceipt';
         let result;
-        // console.log('回调receipt=>',data);
+        console.log('回调receipt=>',data);
         if(!data){
             return;
         }
