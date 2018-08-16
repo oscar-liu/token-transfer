@@ -97,7 +97,7 @@ class Utils{
 
     //eth 转账回调
     static async callbackEthUpAccounts ( data ) {
-        const url = config.service_api + data.callbackurl; //  '/api/transfer/updateEthAccounts';
+        const url = config.service_api + '/api/transfer/updateEthAccounts';
         let result;
         console.log(url);
         console.log(data)
