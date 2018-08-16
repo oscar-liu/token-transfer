@@ -19,11 +19,12 @@ class ApiController {
         let req = ctx.request.body;
         let data = {}, 
             passwd = 'cwv2018';
-        if(req && req.passwd){
+        if(req){
             data = JSON.parse(req);
-            passwd = data.passwd;
+            if(data.params.passwd){
+                passwd = data.params.passwd;
+            }
         }
-            // console.log(passwd)
         let assounts = await web3Api.createAccounts(passwd);
         ctx.body = assounts
     }
