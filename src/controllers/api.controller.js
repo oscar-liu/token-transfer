@@ -79,17 +79,19 @@ class ApiController {
             if(data.params){
                 params = data.params;
             }
-            if(params.to && params.value && params.from ){
+            if(params.to && params.value && params.from && params.source ){
                 console.log('start transfer');
                 let balanceNum = await web3Api.balanceOf(params.from);
                 if(balanceNum <= params.value){
                     result.status = 0;
                     result.msg = '账户余额不足!';
                 }else{
+                    //_to,_value,_from,_source,_callbackur
                     await web3Api.transfer(
                         params.to,
                         params.value,
                         params.from,
+                        params.source,
                         data.callbackurl_receipt
                     );
                 }

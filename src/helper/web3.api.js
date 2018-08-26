@@ -47,7 +47,7 @@ class web3Api {
      * @param {String} _from 发起交易方的来源地址
      * @param {Function} callback 回调函数
      */
-    static async transfer(_to,_value,_from,_callbackurl) {
+    static async transfer(_to,_value,_from,_source,_callbackurl) {
         let result = {
             status : 0,
             receipt: {},
@@ -82,6 +82,7 @@ class web3Api {
             if(_callbackurl){
                 let callbackpostdata = {
                     value: _value, 
+                    from : _source,
                     address : _to,  
                     hash : receipt.transactionHash,
                     status : receipt.status,

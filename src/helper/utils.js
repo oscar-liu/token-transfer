@@ -74,11 +74,13 @@ class Utils{
     static async callbackUpAccounts ( data ) {
         const url = config.service_api + '/api/transfer/updateAccounts';
         let result;
+        console.log('callbackUpAccounts=>',data)
         await axios.post(url, {
             body : {
                 data : {
                     value: data.value, 
                     address: data.address,  
+                    from : data.from,
                     hash : data.hash,
                     status : data.status,
                 }
@@ -88,6 +90,7 @@ class Utils{
               if(response.status == 200){
                 result = response.data;
               }
+              console.log('response=>',response);
           })
           .catch(function (error) {
             result = error;
