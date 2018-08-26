@@ -75,6 +75,7 @@ class Utils{
         const url = config.service_api + '/api/transfer/updateAccounts';
         let result;
         console.log('callbackUpAccounts=>',data)
+        console.log('url=>',url);
         await axios.post(url, {
             body : {
                 data : {
