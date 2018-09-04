@@ -121,7 +121,7 @@ class web3Api {
         //获取当前gas价格
         web3.eth.getGasPrice().then(function(p) {
             rawTx.gasPrice = web3.utils.toHex(p);
-            rawTx.gasLimit = web3.utils.toHex(600000);
+            rawTx.gasLimit = web3.utils.toHex(1200000);
             
             //获取nonce
             web3.eth.getTransactionCount(from,
