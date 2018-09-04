@@ -121,8 +121,12 @@ class web3Api {
         //获取当前gas价格
         web3.eth.getGasPrice().then(function(p) {
             rawTx.gasPrice = web3.utils.toHex(p);
-            rawTx.gasLimit = web3.utils.toHex(1200000);
+            rawTx.gasLimit = web3.utils.toHex(500000);
             
+            //Insufficient funds for gas * price + value
+            //当前地址的余额不足以支付gasLimit乘以gasPrice再加上转账的value值。
+            //异常中的gas指的就是gasLimit，price就是gasPrice，value指的是发起交易转账的以太币。
+
             //获取nonce
             web3.eth.getTransactionCount(from,
             function(err, r) {
