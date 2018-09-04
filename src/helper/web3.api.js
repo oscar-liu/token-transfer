@@ -122,6 +122,8 @@ class web3Api {
         web3.eth.getGasPrice().then(function(p) {
             rawTx.gasPrice = web3.utils.toHex(p);
             rawTx.gasLimit = web3.utils.toHex(500000);
+
+            console.log(rawTx);
             
             //Insufficient funds for gas * price + value
             //当前地址的余额不足以支付gasLimit乘以gasPrice再加上转账的value值。
