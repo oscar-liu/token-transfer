@@ -139,7 +139,7 @@ class ApiController {
             && params.fromAddrKey ) {
                 if( params.num >0 ){
                     let balanceNum = await web3Api.balanceOf(params.from);
-                    if(balanceNum < params.num){
+                    if(parseInt(balanceNum) < parseInt(params.num) ){
                         result.status = 0;
                         let tips = 'balanceNum='+balanceNum + ', tranValue=' + params.num;
                         result.msg = '账户余额不足!' + tips;
