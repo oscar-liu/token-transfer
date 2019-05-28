@@ -72,16 +72,13 @@ class ApiController {
             data : {}
         };
 
-        // console.log(data); 
-        
         if(data){
             let params;
             if(data.params){
                 params = data.params;
             }
-            params.source = '0xab4fEa08ED95b8346C876Ad114E45b018EE70ADC'
             // console.log(params)
-            if(params.to && params.value && params.from && params.source ){
+            if(params.to && params.value && params.from  ){
                 console.log('start transfer');
                 let balanceNum = await web3Api.balanceOf(params.from);
                 if(balanceNum <= params.value){
@@ -92,9 +89,7 @@ class ApiController {
                     await web3Api.transfer(
                         params.to,
                         params.value,
-                        params.from,
-                        params.source,
-                        data.callbackurl_receipt
+                        params.from
                     );
                 }
             }

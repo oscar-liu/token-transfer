@@ -48,49 +48,23 @@ class web3Api {
      * @param {String} _from 发起交易方的来源地址
      * @param {Function} callback 回调函数
      */
-    static async transfer(_to,_value,_from,_source,_callbackurl) {
+    static async transfer(_to,_value,_from,_callbackurl) {
         let result = {
             status : 0,
             receipt: {},
             hash: ''
         };
-        console.log(_to,_value,_from,_source,_callbackurl)
+        console.log(_to,_value,_from,_callbackurl)
         let num = web3.utils.toWei(String(_value), "ether");
         Cwv.methods.transfer(_to,num).send({
             from : _from,
             gas: '1000000'
         }).on('transactionHash', function(hash){
             console.log('transactionHash=>',hash)
-            let postData = {
-                to: _to, 
-                value: _value, 
-                from: _from,  
-                transactionHash : hash
-            };
-            //回调Api Service
-            utils.callbackHash(postData);
         })
         .on('receipt', function(receipt){
             // console.log('receipt=>',receipt.transactionHash); 
             console.log('receipt->status = ' , receipt.status )
-            let postReceiptData = {
-                hash : receipt.transactionHash,
-                status : receipt.status,
-                receipt : JSON.stringify(receipt),
-            };
-            //回调Api Service
-            utils.callbackReceipt(postReceiptData);
-            //回调 function
-            if(_callbackurl){
-                let callbackpostdata = {
-                    value: _value, 
-                    from : _source,
-                    address : _to,  
-                    hash : receipt.transactionHash,
-                    status : receipt.status,
-                };
-                utils.callbackUpAccounts(callbackpostdata);
-            }
         });
         //.on('error', function(err){});
     }
