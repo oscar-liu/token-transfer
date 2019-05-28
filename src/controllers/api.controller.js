@@ -18,7 +18,7 @@ class ApiController {
     static async createAccount(ctx) {
         let req = ctx.request.body;
         let data = {}, 
-            passwd = 'cwv2018';
+            passwd = 'token';
         if(req){
             data = JSON.parse(req);
             if(data.params && data.params.passwd){
