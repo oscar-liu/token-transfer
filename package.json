@@ -7,7 +7,7 @@
     "start": "nodemon ./src/app.js"
   },
   "dependencies": {
-    "axios": "^0.18.0",
+    "axios": "^0.21.1",
     "koa": "^2.5.1",
     "koa-body": "^4.0.4",
     "koa-router": "^7.4.0"
